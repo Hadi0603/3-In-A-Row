@@ -27,6 +27,9 @@ public class UIManager : MonoBehaviour
         pauseBtn.SetActive(false);
         levelWonUI.LeanAlpha(1, 0.5f);
         winPanel.LeanMoveLocalY(0, 0.5f).setEaseOutExpo().delay = 0.1f;
+        PlayerPrefs.SetInt("coins", GameManager.coins += 50);
+        PlayerPrefs.Save();
+        Debug.Log(GameManager.coins);
     }
     public void GameOver()
     {
