@@ -7,17 +7,26 @@ using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
+    public static int coins;
+
+    [SerializeField] private GameObject mainPanel;
+    [SerializeField] GameObject shopPanel;
     /*public static int levelToLoad;
     [SerializeField] private GameObject pauseUI;
     [SerializeField] private GameObject pauseBtn;
-    [FormerlySerializedAs("click1")] [SerializeField] private AudioSource click;
+    [FormerlySerializedAs("click1")] [SerializeField] private AudioSource click;*/
+    [SerializeField] UIManager uiManager;
     
 
     private void Start()
     {
-        levelToLoad = PlayerPrefs.GetInt("levelToLoad", 1);
-    }*/
-    [SerializeField] UIManager uiManager;
+        coins = PlayerPrefs.GetInt("coins", 0);
+        if (shopPanel != null)
+        {
+            shopPanel.SetActive(false);
+        }
+        //levelToLoad = PlayerPrefs.GetInt("levelToLoad", 1);
+    }
     public void Play()
     {
         SceneManager.LoadScene(1);
@@ -52,4 +61,15 @@ public class GameManager : MonoBehaviour
     {
         Application.Quit();
     }
+
+    public void ShopBtn()
+    {
+        shopPanel.SetActive(true);
+    }
+
+    public void ExitShopBtn()
+    {
+        shopPanel.SetActive(false);
+    }
+    
 }
