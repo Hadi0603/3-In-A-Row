@@ -1,11 +1,15 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
+using System.Collections.Generic;
+using System.Linq;
+
 
 public class GridManager : MonoBehaviour
 {
-    public GameObject playerBallPrefab;
-    public GameObject aiBallPrefab;
+    [FormerlySerializedAs("ballPrefabs")] [SerializeField] private GameObject[] emojiPrefabs;
+    [SerializeField] GameObject[] aiEmojiPrefabs;
     public Transform playerSpawnPoint;
     public Transform aiSpawnPoint;
     public int rows = 6;
@@ -15,7 +19,10 @@ public class GridManager : MonoBehaviour
     public Transform[,] gridPositions;
     public Transform gridParent;
     [SerializeField] GameObject uiManager;
-
+     
+    private int playerEmojiIndex;
+    private bool aiSelected = false;
+    private int aiEmojiIndex;
     private bool isMoving = false;
     private bool isAITurn = false;
     private bool isSwiping = false;
@@ -30,6 +37,8 @@ public class GridManager : MonoBehaviour
         FillGridPositions();
 
         SpawnPlayerBall();
+        playerEmojiIndex = PlayerPrefs.GetInt("selectedEmoji", 0);
+        playerEmojiIndex = Mathf.Clamp(playerEmojiIndex, 0, emojiPrefabs.Length - 1);
     }
 
     void Update()
@@ -279,12 +288,31 @@ public class GridManager : MonoBehaviour
 
     void SpawnPlayerBall()
     {
-        currentBall = Instantiate(playerBallPrefab, playerSpawnPoint.position, Quaternion.identity);
-    }
+        int selectedIndex = PlayerPrefs.GetInt("selectedEmoji", 0);
+        selectedIndex = Mathf.Clamp(selectedIndex, 0, emojiPrefabs.Length - 1);
 
+        currentBall = Instantiate(emojiPrefabs[selectedIndex], playerSpawnPoint.position, Quaternion.identity);
+    }
+    
     void SpawnAIBall()
     {
-        currentBall = Instantiate(aiBallPrefab, aiSpawnPoint.position, Quaternion.identity);
+        //currentBall = Instantiate(aiBallPrefab, aiSpawnPoint.position, Quaternion.identity);
+
+        if (aiSelected == false)
+        {
+            int randomIndex = Random.Range(0, aiEmojiPrefabs.Length);
+            currentBall = Instantiate(aiEmojiPrefabs[randomIndex], aiSpawnPoint.position, Quaternion.identity);
+            aiSelected = true;
+            aiEmojiIndex = randomIndex;
+        }
+        else if (aiSelected == true)
+        {
+            currentBall = Instantiate(aiEmojiPrefabs[aiEmojiIndex], aiSpawnPoint.position, Quaternion.identity);
+        }
+        else
+        {
+            Debug.LogError("No different AI emoji available!");
+        }
     }
 
     void AiTurn()
