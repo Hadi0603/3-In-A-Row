@@ -1,0 +1,7 @@
+NAME : EMOJI ADVENTURE: 3 MATCH
+PACKAGE NAME :  com.eatm.emojiadventurethreematch
+COMPANY: EATM
+KEYSTORE/ ALIAS: eatm
+PASSWORD: Airi@dev01
+VERSION 1.0
+BUNDLE : 1
